@@ -510,7 +510,6 @@ runners:
   #
   # tpl: https://helm.sh/docs/howto/charts_tips_and_tricks/#using-the-tpl-function
   # runner configuration: https://docs.gitlab.com/runner/configuration/advanced-configuration.html
-  # "{{ .Values.gitlabRunner.cacheBucketName }}"
   config: |
     [[runners]]
       executor = "kubernetes"

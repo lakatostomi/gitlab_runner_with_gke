@@ -23,7 +23,7 @@ A self-hosted GitLab Runner using the **Kubernetes executor** on **Google Kubern
 │  │  │       └── ServiceAccount: runner-sa (WI)        │ │   │
 │  │  │                                                 │ │   │
 │  │  │  Namespace: gitlab-runner                       │ │   │
-│  │  │  └── Job Pods (spawned per pipeline job)        │ │   │
+│  │  │  └── Job Pods                                   │ │   │
 │  │  └─────────────────────────────────────────────────┘ │   │
 │  └──────────────────────────────────────────────────────┘   │
 │                                                             │
