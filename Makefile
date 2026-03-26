@@ -1,4 +1,4 @@
-PROJECT_ID := my-project-id
+PROJECT_ID ?= $(error PROJECT_ID is not set. Run: make deploy_cluster PROJECT_ID=your-project-id)
 REGION := europe-west1
 GITLAB_RUNNER_NAME := gke-runner
 NAMESPACE := gitlab-runner
@@ -8,7 +8,7 @@ GCS_CACHE_SUFFIX := gitlab-runner-cache-bucket
 
 deploy_cluster:
 	terraform plan
-	terraform apply --auto-approve -var="project_id=$(PROJECT_ID)"
+	terraform apply -var="project_id=$(PROJECT_ID)"
 
 config_cluster: deploy_cluster
 	gcloud container clusters get-credentials gitlab-cluster --zone=$(REGION)
@@ -47,7 +47,19 @@ update_runner:
 		--set gitlabRunner.service_account="$(K8S_SERVICE_ACCOUNT)" \
   		-f values.yaml
 
-test:
+reinstall_runner:
+	helm delete --namespace $(NAMESPACE) gitlab-runner
+	helm install gitlab-runner gitlab/gitlab-runner \
+  		--namespace $(NAMESPACE) \
+		--version 0.87.0 \
+		--set name="$(GITLAB_RUNNER_NAME)" \
+		--set gitlabRunner.cacheBucketName="$(PROJECT_ID)-$(GCS_CACHE_SUFFIX)" \
+		--set gitlabRunner.namespace="$(NAMESPACE)" \
+		--set namespace="$(NAMESPACE)" \
+		--set gitlabRunner.service_account="$(K8S_SERVICE_ACCOUNT)" \
+  		-f values.yaml
+
+verify:
 	helm template gitlab-runner gitlab/gitlab-runner \
   		--namespace $(NAMESPACE) \
 		--version 0.87.0 \
@@ -60,4 +72,5 @@ test:
 
 clean_up:
 	helm delete --namespace $(NAMESPACE) gitlab-runner
+	kubectl wait --for=delete pod -l app=gitlab-runner -n $(NAMESPACE) --timeout=300s
 	terraform destroy --auto-approve		

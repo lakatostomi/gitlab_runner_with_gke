@@ -9,16 +9,16 @@ rules:
   verbs:
   - "list" # Required when `print_pod_warning_events=true`
   - "watch" # Required when `FF_PRINT_POD_EVENTS=true`
-- apiGroups: [""]
-  resources: ["namespaces"]
-  verbs:
-  - "create" # Required when `kubernetes.NamespacePerJob=true`
-  - "delete" # Required when `kubernetes.NamespacePerJob=true`
-- apiGroups: ["policy"]
-  resources: ["poddisruptionbudgets"]
-  verbs:
-  - "create" # Required when `pod_disruption_budget=true`
-  - "get" # Required when `pod_disruption_budget=true`
+# - apiGroups: [""] # Not necessary for this project 
+#   resources: ["namespaces"]
+#   verbs:
+#   - "create" # Required when `kubernetes.NamespacePerJob=true`
+#   - "delete" # Required when `kubernetes.NamespacePerJob=true`
+# - apiGroups: ["policy"]
+#   resources: ["poddisruptionbudgets"]
+#   verbs:
+#   - "create" # Required when `pod_disruption_budget=true`
+#   - "get" # Required when `pod_disruption_budget=true`
 - apiGroups: [""]
   resources: ["pods"]
   verbs:
