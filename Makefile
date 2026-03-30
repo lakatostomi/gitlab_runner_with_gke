@@ -11,7 +11,7 @@ deploy_cluster:
 	terraform apply -var="project_id=$(PROJECT_ID)"
 
 config_cluster: deploy_cluster
-	gcloud container clusters get-credentials gitlab-cluster --zone=$(REGION)
+	gcloud container clusters get-credentials gitlab-cluster --zone=$(REGION) --project=$(PROJECT_ID)
 	kubectl create namespace $(NAMESPACE)
 	kubectl create serviceaccount $(K8S_SERVICE_ACCOUNT) -n $(NAMESPACE)
 	kubectl annotate serviceaccount $(K8S_SERVICE_ACCOUNT) \
