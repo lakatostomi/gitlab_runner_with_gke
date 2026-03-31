@@ -3,8 +3,14 @@ locals {
   primary_ip4_range = "10.10.0.0/24"
   gke_pods_range    = "10.44.0.0/14"
   gke_service_range = "10.48.0.0/20"
+  list_of_apis      = ["compute.googleapis.com", "container.googleapis.com", "iam.googleapis.com", "iamcredentials.googleapis.com", "cloudresourcemanager.googleapis.com", "storage.googleapis.com", "monitoring.googleapis.com", "logging.googleapis.com"]
 }
 
+resource "google_project_service" "enable_apis" {
+  for_each = toset(local.list_of_apis)
+  project  = var.project_id
+  service  = each.key
+}
 
 module "gitlab_vpc" {
   source                   = "github.com/GoogleCloudPlatform/cloud-foundation-fabric//modules/net-vpc?ref=v40.0.0"
