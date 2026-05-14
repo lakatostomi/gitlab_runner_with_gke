@@ -17,6 +17,7 @@ resource "google_storage_bucket" "bucket" {
   name          = each.value.name
   location      = each.value.location
   force_destroy = each.value.force_destroy
+  uniform_bucket_level_access = each.value.uniform_bucket_level_access
   versioning {
     enabled = each.value.versioning
   }

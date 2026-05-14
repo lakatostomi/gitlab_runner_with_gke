@@ -16,6 +16,7 @@ variable "node_pool" {
     max_node_count                = optional(number, 2)
     machine_type                  = string
     service_account               = string
+    labels                        = map(string)
     workload_metadata_config_mode = optional(string, "GKE_METADATA")
   })
 

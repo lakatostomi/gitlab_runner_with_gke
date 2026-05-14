@@ -25,6 +25,7 @@ variable "storage_buckets" {
     location      = string
     versioning    = optional(bool, false)
     force_destroy = bool
+    uniform_bucket_level_access = optional(bool, false)
     iam           = optional(map(string))
   }))
 }

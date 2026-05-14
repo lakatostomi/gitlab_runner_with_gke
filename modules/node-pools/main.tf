@@ -16,6 +16,12 @@ resource "google_container_node_pool" "node_pool" {
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
+    labels = var.node_pool.labels
+    taint {
+      key = "runner-size"
+      value = var.node_pool.name
+      effect = "NO_SCHEDULE"
+    }
 
     workload_metadata_config {
       mode = var.node_pool.workload_metadata_config_mode

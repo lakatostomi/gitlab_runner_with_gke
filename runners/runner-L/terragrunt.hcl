@@ -29,6 +29,7 @@ inputs = {
     initial_node_count = 1
     min_node_count     = 1
     max_node_count     = 2
+    labels             = {workload = "gitlab-runner", size = "runner-l"}
     machine_type       = "n2-standard-2"
     service_account    = dependency.cluster.outputs.service_account_emails["gitlab-nodes"]
   }
