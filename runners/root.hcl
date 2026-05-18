@@ -17,10 +17,12 @@ generate "providers" {
     provider "google" {
         project = var.project_id
         region = var.region
+        impersonate_service_account = "iac-deploy-sa@my-test-project-88.iam.gserviceaccount.com"
     }
     provider "google-beta" {
         project = var.project_id
         region = var.region
+        impersonate_service_account = "iac-deploy-sa@my-test-project-88.iam.gserviceaccount.com"
     }
     EOT
 }

@@ -520,8 +520,9 @@ runners:
       [runners.cache]
         Type = "gcs"
         Shared = true
+        
         [runners.cache.gcs]
-          BucketName = "gs://{{ .Values.gitlabRunner.cacheBucketName }}"
+          BucketName = "{{ .Values.gitlabRunner.cacheBucketName }}"
 
       [runners.kubernetes]
         namespace = "{{ .Values.gitlabRunner.namespace }}"

@@ -3,7 +3,7 @@ include {
 }
 
 terraform {
-  source = "../../modules/shared-gke-resources"
+  source = "git::https://gitlab.com/terraform_projects2/gke-runner-modules.git//shared-gke-resources?ref=v1.0.0"
 }
 
 locals {
