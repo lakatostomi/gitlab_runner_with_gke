@@ -1,7 +1,26 @@
+locals {
+  config = yamldecode(file("config.yaml"))
+
+  module = {
+    url = lookup(local.config.module, reverse(split("-", path_relative_to_include()))[0]).url
+    ref = lookup(local.config.module, reverse(split("-", path_relative_to_include()))[0]).ref
+  }
+
+  project_id     = lookup(local.config.inputs, "project_id")
+  region         = lookup(local.config.inputs, "region")
+  backend_bucket = lookup(local.config.inputs, "backend_bucket")
+  impersonate_sa = lookup(local.config.inputs, "impersonate_sa")
+}
+
+inputs = {
+  project_id = local.project_id
+  region     = local.region
+}
+
 remote_state {
   backend = "gcs"
   config = {
-    bucket = "tf-state-bucket-for-wif-test-project"
+    bucket = "${local.backend_bucket}"
     prefix = "terraform/state/${get_path_from_repo_root()}"
   }
   generate = {
@@ -17,12 +36,12 @@ generate "providers" {
     provider "google" {
         project = var.project_id
         region = var.region
-        impersonate_service_account = "iac-deploy-sa@my-test-project-88.iam.gserviceaccount.com"
+        impersonate_service_account = "${local.impersonate_sa}"
     }
     provider "google-beta" {
         project = var.project_id
         region = var.region
-        impersonate_service_account = "iac-deploy-sa@my-test-project-88.iam.gserviceaccount.com"
+        impersonate_service_account = "${local.impersonate_sa}"
     }
     EOT
 }
@@ -45,4 +64,8 @@ generate "versions" {
       }
     }
     EOT
+}
+
+terraform {
+  source = "git::${local.module.url}?ref=${local.module.ref}"
 }

@@ -2,21 +2,16 @@ include {
   path = find_in_parent_folders("root.hcl")
 }
 
-terraform {
-  source = "git::https://gitlab.com/terraform_projects2/gke-runner-modules.git//shared-gke-resources?ref=v1.0.0"
-}
-
 locals {
-  project_id          = "my-test-project-88"
-  region              = "europe-west1"
+  env = read_terragrunt_config(find_in_parent_folders("root.hcl"))
+
+  project_id          = local.env.locals.project_id
+  region              = local.env.locals.region
   namespace           = "gitlab-runner"
   k8s_service_account = "runner-sa"
 }
 
 inputs = {
-  project_id = local.project_id
-  region     = local.region
-
   vpc_network = {
     name = "runner-vpc"
 

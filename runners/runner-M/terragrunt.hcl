@@ -2,8 +2,8 @@ include {
   path = find_in_parent_folders("root.hcl")
 }
 
-terraform {
-  source = "git::https://gitlab.com/terraform_projects2/gke-runner-modules.git//node-pools?ref=v1.0.0"
+locals {
+  env = read_terragrunt_config(find_in_parent_folders("root.hcl"))
 }
 
 dependency "cluster" {
@@ -19,12 +19,9 @@ dependency "cluster" {
 }
 
 inputs = {
-  project_id = "my-test-project-88"
-  region     = "europe-west1"
-
   node_pool = {
     name               = "runner-m"
-    location           = "europe-west1"
+    location           = local.env.locals.region
     cluster_name       = dependency.cluster.outputs.gke_cluster_name
     initial_node_count = 1
     min_node_count     = 1
