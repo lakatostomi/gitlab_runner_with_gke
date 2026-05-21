@@ -1,11 +1,6 @@
 locals {
   config = yamldecode(file("config.yaml"))
 
-  module = {
-    url = lookup(local.config.module, reverse(split("-", path_relative_to_include()))[0]).url
-    ref = lookup(local.config.module, reverse(split("-", path_relative_to_include()))[0]).ref
-  }
-
   project_id     = lookup(local.config.inputs, "project_id")
   region         = lookup(local.config.inputs, "region")
   backend_bucket = lookup(local.config.inputs, "backend_bucket")
@@ -64,8 +59,4 @@ generate "versions" {
       }
     }
     EOT
-}
-
-terraform {
-  source = "git::${local.module.url}?ref=${local.module.ref}"
 }

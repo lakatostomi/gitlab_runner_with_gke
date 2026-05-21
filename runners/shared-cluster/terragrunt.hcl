@@ -2,8 +2,13 @@ include {
   path = find_in_parent_folders("root.hcl")
 }
 
+terraform {
+  source = "${local.module.url}?ref=${local.module.ref}"
+}
+
 locals {
   env = read_terragrunt_config(find_in_parent_folders("root.hcl"))
+  module = lookup(local.env.locals.config.modules, "shared-cluster")
 
   project_id          = local.env.locals.project_id
   region              = local.env.locals.region
